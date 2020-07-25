@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+    
+
+</head>
+
+<body>
+
+    <h1>hello</h1>
+    <script src="webgazer.js" type="text/javascript"></script>
+    <script>
+        webgazer.setGazeListener(function (data, elapsedTime) {
+            if (data == null) {
+                return;
+            }
+            var xprediction = data.x; //these x coordinates are relative to the viewport
+            console.log(xprediction);
+            var yprediction = data.y; //these y coordinates are relative to the viewport
+            console.log(yprediction);
+            console.log(elapsedTime); //elapsed time is based on time since begin was called
+        }).begin();
+
+//        var prediction = webgazer.getCurrentPrediction();
+//        if (prediction) {
+//            var x = prediction.x;
+//            var y = prediction.y;
+//        }
+    </script>
+
+</body>
+
+</html>
