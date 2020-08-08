@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>three.js webgl - cloth simulation</title>
+	<title>Travelling based on data</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<link type="text/css" rel="stylesheet" href="main.css">
@@ -27,6 +27,7 @@
 	<script src="./js/THREEx.FullScreen.js"></script>
 	<script src="./js/THREEx.KeyboardState.js"></script>
 	<script src="./js/THREEx.WindowResize.js"></script>
+
 
 	<script type="module">
 
@@ -271,121 +272,6 @@
 
 		}
 
-		function simulate(now) {
-
-			var windStrength = Math.cos(now / 7000) * 20 + 40;
-
-			windForce.set(Math.sin(now / 2000), Math.cos(now / 3000), Math.sin(now / 1000));
-			windForce.normalize();
-			windForce.multiplyScalar(windStrength);
-
-			var i, j, il, particles, particle, constraints, constraint;
-
-			// Aerodynamics forces
-
-			if (params.enableWind) {
-
-				var indx;
-				var normal = new THREE.Vector3();
-				var indices = clothGeometry.index;
-				var normals = clothGeometry.attributes.normal;
-
-				particles = cloth.particles;
-
-				for (i = 0, il = indices.count; i < il; i += 3) {
-
-					for (j = 0; j < 3; j++) {
-
-						indx = indices.getX(i + j);
-						normal.fromBufferAttribute(normals, indx);
-						tmpForce.copy(normal).normalize().multiplyScalar(normal.dot(windForce));
-						particles[indx].addForce(tmpForce);
-
-					}
-
-				}
-
-			}
-
-			for (particles = cloth.particles, i = 0, il = particles.length; i < il; i++) {
-
-				particle = particles[i];
-				particle.addForce(gravity);
-
-				particle.integrate(TIMESTEP_SQ);
-
-			}
-
-			// Start Constraints
-
-			constraints = cloth.constraints;
-			il = constraints.length;
-
-			for (i = 0; i < il; i++) {
-
-				constraint = constraints[i];
-				satisfyConstraints(constraint[0], constraint[1], constraint[2]);
-
-			}
-
-			// Ball Constraints
-
-			ballPosition.z = - Math.sin(now / 600) * 90; //+ 40;
-			ballPosition.x = Math.cos(now / 400) * 70;
-
-			if (params.showBall) {
-
-				sphere.visible = true;
-
-				for (particles = cloth.particles, i = 0, il = particles.length; i < il; i++) {
-
-					particle = particles[i];
-					var pos = particle.position;
-					diff.subVectors(pos, ballPosition);
-					if (diff.length() < ballSize) {
-
-						// collided
-						diff.normalize().multiplyScalar(ballSize);
-						pos.copy(ballPosition).add(diff);
-
-					}
-
-				}
-
-			} else {
-
-				sphere.visible = false;
-
-			}
-
-
-			// Floor Constraints
-
-			for (particles = cloth.particles, i = 0, il = particles.length; i < il; i++) {
-
-				particle = particles[i];
-				pos = particle.position;
-				if (pos.y < - 250) {
-
-					pos.y = - 250;
-
-				}
-
-			}
-
-			// Pin Constraints
-
-			for (i = 0, il = pins.length; i < il; i++) {
-
-				var xy = pins[i];
-				var p = particles[xy];
-				p.position.copy(p.original);
-				p.previous.copy(p.original);
-
-			}
-
-
-		}
 
 		/* testing cloth simulation */
 
@@ -438,21 +324,23 @@
 			// camera
 
 			camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
-			camera.position.set(0, 1000, 2800);
+			camera.position.set(500, 125, 3500);
 			camera.lookAt(scene.position);
 			scene.add(camera);
 			//map camera
 
 			// orthographic cameras
 			mapCamera = new THREE.OrthographicCamera(
-				window.innerWidth / -2,		// Left
-				window.innerWidth / 2,		// Right
-				window.innerHeight / 2,		// Top
-				window.innerHeight / -2,	// Bottom
-				-5000,            			// Near 
-				10000);           			// Far 
+				// change the zoom level by increasing/decreasing the number of inners with the same magnitude. 
+				window.innerWidth / -0.25,		// Left 
+				window.innerWidth / 0.25,		// Right
+				window.innerHeight / 0.25,		// Top
+				window.innerHeight / -0.25,	// Bottom
+				-1000,            			// Near 
+				100000);           			// Far 
 			mapCamera.up = new THREE.Vector3(0, 0, -1);
-			mapCamera.lookAt(new THREE.Vector3(0, -1, 0));
+			mapCamera.lookAt(new THREE.Vector3(0, -3000, 0));
+			mapCamera.position.set(0, 0, -500);
 			scene.add(mapCamera);
 			//THREEx.WindowResize(renderer, mapCamera);
 			// lights
@@ -495,22 +383,6 @@
 
 			clothGeometry = new THREE.ParametricBufferGeometry(clothFunction, cloth.w, cloth.h);
 
-			// cloth mesh
-			/*
-						object = new THREE.Mesh(clothGeometry, clothMaterial);
-						object.position.set(0, 0, 0);
-						object.castShadow = true;
-						scene.add(object);
-			
-						object.customDepthMaterial = new THREE.MeshDepthMaterial({
-							depthPacking: THREE.RGBADepthPacking,
-							map: clothTexture,
-							alphaTest: 0.5
-						});
-			*/
-			// sphere
-
-
 			// ground
 
 			var groundTexture = loader.load('textures/terrain/grasslight-big.jpg');
@@ -529,34 +401,334 @@
 
 			// adding cubes
 
-
-			var cubeGeometry1 = new THREE.BoxGeometry(300, 300, 300);
+			var cubeGeometry1 = new THREE.BoxGeometry(500, 500, 500);
 			var cubeMaterial1 = new THREE.MeshLambertMaterial({ color: 0xff0000 });
 			var cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
 			cube1.castShadow = true;
 
 			// position the cube
-			cube1.position.x = -250;
+			cube1.position.x = -0;
 			cube1.position.y = -125;
-			cube1.position.z = -500;
+			cube1.position.z = -0;
 
 			// add the cube to the scene
 			scene.add(cube1);
 
 
-			var cubeGeometry2 = new THREE.BoxGeometry(300, 300, 300);
+			var cubeGeometry2 = new THREE.BoxGeometry(500, 500, 500);
 			var cubeMaterial2 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube2 = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
 			cube2.castShadow = true;
 
 			// position the cube
-			cube2.position.x = 250;
+			cube2.position.x = 1000;
 			cube2.position.y = -125;
-			cube2.position.z = -500;
+			cube2.position.z = 0;
 
 			// add the cube to the scene
 			scene.add(cube2);
 
+			var cubeGeometry3 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial3 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
+			var cube3 = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
+			cube3.castShadow = true;
+
+			// position the cube
+			cube3.position.x = -1000;
+			cube3.position.y = -125;
+			cube3.position.z = 0;
+
+			// add the cube to the scene
+			scene.add(cube3);
+
+			var cubeGeometry4 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial4 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
+			var cube4 = new THREE.Mesh(cubeGeometry4, cubeMaterial4);
+			cube4.castShadow = true;
+
+			// position the cube
+			cube4.position.x = 0;
+			cube4.position.y = -125;
+			cube4.position.z = 1000;
+
+			// add the cube to the scene
+			scene.add(cube4);
+
+			var cubeGeometry5 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial5 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
+			var cube5 = new THREE.Mesh(cubeGeometry5, cubeMaterial5);
+			cube5.castShadow = true;
+
+			// position the cube
+			cube5.position.x = -1000;
+			cube5.position.y = -125;
+			cube5.position.z = 1000;
+
+			// add the cube to the scene
+			scene.add(cube5);
+
+			var cubeGeometry6 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial6 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
+			var cube6 = new THREE.Mesh(cubeGeometry6, cubeMaterial6);
+			cube6.castShadow = true;
+
+			// position the cube
+			cube6.position.x = 1000;
+			cube6.position.y = -125;
+			cube6.position.z = 1000;
+
+			// add the cube to the scene
+			scene.add(cube6);
+
+
+			var cubeGeometry7 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial7 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
+			var cube7 = new THREE.Mesh(cubeGeometry7, cubeMaterial7);
+			cube7.castShadow = true;
+
+			// position the cube
+			cube7.position.x = 1000;
+			cube7.position.y = -125;
+			cube7.position.z = -1000;
+
+			// add the cube to the scene
+			scene.add(cube7);
+
+
+			var cubeGeometry8 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial8 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
+			var cube8 = new THREE.Mesh(cubeGeometry8, cubeMaterial8);
+			cube8.castShadow = true;
+
+			// position the cube
+			cube8.position.x = 0;
+			cube8.position.y = -125;
+			cube8.position.z = -1000;
+
+			// add the cube to the scene
+			scene.add(cube8);
+
+			var cubeGeometry9 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial9 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
+			var cube9 = new THREE.Mesh(cubeGeometry8, cubeMaterial8);
+			cube9.castShadow = true;
+
+			// position the cube
+			cube9.position.x = -1000;
+			cube9.position.y = -125;
+			cube9.position.z = -1000;
+
+			// add the cube to the scene
+			scene.add(cube9);
+
+			var cubeGeometry10 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial10 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube10 = new THREE.Mesh(cubeGeometry10, cubeMaterial10);
+			cube10.castShadow = true;
+
+			// position the cube
+			cube10.position.x = -2000;
+			cube10.position.y = -125;
+			cube10.position.z = 2000;
+
+			// add the cube to the scene
+			scene.add(cube10);
+
+			var cubeGeometry11 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial11 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube11 = new THREE.Mesh(cubeGeometry11, cubeMaterial11);
+			cube11.castShadow = true;
+
+			// position the cube
+			cube11.position.x = -1000;
+			cube11.position.y = -125;
+			cube11.position.z = 2000;
+
+			// add the cube to the scene
+			scene.add(cube11);
+
+			var cubeGeometry12 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial12 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube12 = new THREE.Mesh(cubeGeometry12, cubeMaterial12);
+			cube12.castShadow = true;
+
+			// position the cube
+			cube12.position.x = 0;
+			cube12.position.y = -125;
+			cube12.position.z = 2000;
+
+			// add the cube to the scene
+			scene.add(cube12);
+
+			var cubeGeometry13 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial13 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube13 = new THREE.Mesh(cubeGeometry13, cubeMaterial13);
+			cube13.castShadow = true;
+
+			// position the cube
+			cube13.position.x = 1000;
+			cube13.position.y = -125;
+			cube13.position.z = 2000;
+
+			// add the cube to the scene
+			scene.add(cube13);
+
+			var cubeGeometry14 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial14 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube14 = new THREE.Mesh(cubeGeometry14, cubeMaterial14);
+			cube14.castShadow = true;
+
+			// position the cube
+			cube14.position.x = 2000;
+			cube14.position.y = -125;
+			cube14.position.z = 2000;
+
+			// add the cube to the scene
+			scene.add(cube14);
+
+			var cubeGeometry15 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial15 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube15 = new THREE.Mesh(cubeGeometry15, cubeMaterial15);
+			cube15.castShadow = true;
+
+			// position the cube
+			cube15.position.x = 2000;
+			cube15.position.y = -125;
+			cube15.position.z = 1000;
+
+			// add the cube to the scene
+			scene.add(cube15);
+
+			var cubeGeometry16 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial16 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube16 = new THREE.Mesh(cubeGeometry16, cubeMaterial16);
+			cube16.castShadow = true;
+
+			// position the cube
+			cube16.position.x = 2000;
+			cube16.position.y = -125;
+			cube16.position.z = 0;
+
+			// add the cube to the scene
+			scene.add(cube16);
+
+			var cubeGeometry17 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial17 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube17 = new THREE.Mesh(cubeGeometry17, cubeMaterial17);
+			cube17.castShadow = true;
+
+			// position the cube
+			cube17.position.x = 2000;
+			cube17.position.y = -125;
+			cube17.position.z = -1000;
+
+			// add the cube to the scene
+			scene.add(cube17);
+
+
+			var cubeGeometry18 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial18 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube18 = new THREE.Mesh(cubeGeometry18, cubeMaterial18);
+			cube18.castShadow = true;
+
+			// position the cube
+			cube18.position.x = 2000;
+			cube18.position.y = -125;
+			cube18.position.z = -2000;
+
+			// add the cube to the scene
+			scene.add(cube18);
+
+			var cubeGeometry19 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial19 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube19 = new THREE.Mesh(cubeGeometry19, cubeMaterial19);
+			cube19.castShadow = true;
+
+			// position the cube
+			cube19.position.x = 1000;
+			cube19.position.y = -125;
+			cube19.position.z = -2000;
+
+			// add the cube to the scene
+			scene.add(cube19);
+
+			var cubeGeometry20 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial20 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube20 = new THREE.Mesh(cubeGeometry20, cubeMaterial20);
+			cube20.castShadow = true;
+
+			// position the cube
+			cube20.position.x = 0;
+			cube20.position.y = -125;
+			cube20.position.z = -2000;
+
+			// add the cube to the scene
+			scene.add(cube20);
+
+			var cubeGeometry21 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial21 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube21 = new THREE.Mesh(cubeGeometry21, cubeMaterial21);
+			cube21.castShadow = true;
+
+			// position the cube
+			cube21.position.x = -1000;
+			cube21.position.y = -125;
+			cube21.position.z = -2000;
+
+			// add the cube to the scene
+			scene.add(cube21);
+
+			var cubeGeometry22 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial22 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube22 = new THREE.Mesh(cubeGeometry22, cubeMaterial22);
+			cube22.castShadow = true;
+
+			// position the cube
+			cube22.position.x = -2000;
+			cube22.position.y = -125;
+			cube22.position.z = -2000;
+
+			// add the cube to the scene
+			scene.add(cube22);
+
+			var cubeGeometry23 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial23 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube23 = new THREE.Mesh(cubeGeometry23, cubeMaterial23);
+			cube23.castShadow = true;
+
+			// position the cube
+			cube23.position.x = -2000;
+			cube23.position.y = -125;
+			cube23.position.z = -1000;
+
+			// add the cube to the scene
+			scene.add(cube23);
+
+			var cubeGeometry24 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial24 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube24 = new THREE.Mesh(cubeGeometry24, cubeMaterial24);
+			cube24.castShadow = true;
+
+			// position the cube
+			cube24.position.x = -2000;
+			cube24.position.y = -125;
+			cube24.position.z = 0;
+
+			// add the cube to the scene
+			scene.add(cube24);
+
+			var cubeGeometry25 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeMaterial25 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cube25 = new THREE.Mesh(cubeGeometry25, cubeMaterial25);
+			cube25.castShadow = true;
+
+			// position the cube
+			cube25.position.x = -2000;
+			cube25.position.y = -125;
+			cube25.position.z = 1000;
+
+			// add the cube to the scene
+			scene.add(cube25);
 
 			// renderer
 
@@ -584,53 +756,12 @@
 			// controls
 			var controls = new OrbitControls(camera, renderer.domElement);
 			controls.maxPolarAngle = Math.PI * 0.5;
-			controls.minDistance = 1000;
-			controls.maxDistance = 5000;
-
-			// performance monitor
-			/*
-			stats = new Stats();
-			stats.domElement.style.position = 'absolute';
-			stats.domElement.style.bottom = '0px';
-			stats.domElement.style.zIndex = 100;
-			container.appendChild(stats.domElement);
-				*/
-			//
-			/*
-						window.addEventListener('resize', onWindowResize, false);
-			*/
-			//
-			/*
-			var gui = new GUI();
-			gui.add(params, 'enableWind').name('Enable wind');
-			gui.add(params, 'showBall').name('Show ball');
-			gui.add(params, 'togglePins').name('Toggle pins');
-			*/
-			//
-			/*
-						if (typeof TESTING !== 'undefined') {
-			
-							for (var i = 0; i < 50; i++) {
-			
-								simulate(500 - 10 * i);
-			
-							}
-			
-						}
-			*/
+			controls.minDistance = 1;
+			controls.maxDistance = 10000;
 		}
 
 		//
-		/*
-				function onWindowResize() {
-		
-					camera.aspect = window.innerWidth / window.innerHeight;
-					camera.updateProjectionMatrix();
-		
-					renderer.setSize(window.innerWidth, window.innerHeight);
-		
-				}
-		*/
+
 		//
 
 		function animate() {
@@ -647,22 +778,6 @@
 			var p = cloth.particles;
 			var w = window.innerWidth, h = window.innerHeight;
 
-			/*
-			for (var i = 0, il = p.length; i < il; i++) {
-
-				var v = p[i].position;
-
-				clothGeometry.attributes.position.setXYZ(i, v.x, v.y, v.z);
-
-			}
-
-			clothGeometry.attributes.position.needsUpdate = true;
-
-			clothGeometry.computeVertexNormals();
-*/
-			//sphere.position.copy(ballPosition);
-
-
 
 			renderer.clear();
 			renderer.setViewport(0, 0, w, h);
@@ -676,6 +791,7 @@
 		}
 
 	</script>
+
 </body>
 
 </html>
