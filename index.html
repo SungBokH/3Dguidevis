@@ -307,8 +307,10 @@
 		var sphere;
 		var object;
 		var MovingCube;
+		var pts_arr = [];
 		init();
 		animate(0);
+
 
 		function init() {
 
@@ -408,7 +410,7 @@
 
 			// adding cubes
 
-			var cubeGeometry1 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry1 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial1 = new THREE.MeshLambertMaterial({ color: 0xff0000 });
 			var cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
 			cube1.castShadow = true;
@@ -422,7 +424,7 @@
 			scene.add(cube1);
 
 
-			var cubeGeometry2 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry2 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial2 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube2 = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
 			cube2.castShadow = true;
@@ -435,7 +437,7 @@
 			// add the cube to the scene
 			scene.add(cube2);
 
-			var cubeGeometry3 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry3 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial3 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube3 = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
 			cube3.castShadow = true;
@@ -448,7 +450,7 @@
 			// add the cube to the scene
 			scene.add(cube3);
 
-			var cubeGeometry4 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry4 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial4 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube4 = new THREE.Mesh(cubeGeometry4, cubeMaterial4);
 			cube4.castShadow = true;
@@ -461,7 +463,7 @@
 			// add the cube to the scene
 			scene.add(cube4);
 
-			var cubeGeometry5 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry5 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial5 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube5 = new THREE.Mesh(cubeGeometry5, cubeMaterial5);
 			cube5.castShadow = true;
@@ -474,7 +476,7 @@
 			// add the cube to the scene
 			scene.add(cube5);
 
-			var cubeGeometry6 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry6 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial6 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube6 = new THREE.Mesh(cubeGeometry6, cubeMaterial6);
 			cube6.castShadow = true;
@@ -488,7 +490,7 @@
 			scene.add(cube6);
 
 
-			var cubeGeometry7 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry7 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial7 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube7 = new THREE.Mesh(cubeGeometry7, cubeMaterial7);
 			cube7.castShadow = true;
@@ -502,7 +504,7 @@
 			scene.add(cube7);
 
 
-			var cubeGeometry8 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry8 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial8 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube8 = new THREE.Mesh(cubeGeometry8, cubeMaterial8);
 			cube8.castShadow = true;
@@ -515,7 +517,7 @@
 			// add the cube to the scene
 			scene.add(cube8);
 
-			var cubeGeometry9 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry9 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial9 = new THREE.MeshLambertMaterial({ color: 0xaaaa00 });
 			var cube9 = new THREE.Mesh(cubeGeometry8, cubeMaterial8);
 			cube9.castShadow = true;
@@ -528,7 +530,7 @@
 			// add the cube to the scene
 			scene.add(cube9);
 
-			var cubeGeometry10 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry10 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial10 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube10 = new THREE.Mesh(cubeGeometry10, cubeMaterial10);
 			cube10.castShadow = true;
@@ -541,7 +543,7 @@
 			// add the cube to the scene
 			scene.add(cube10);
 
-			var cubeGeometry11 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry11 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial11 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube11 = new THREE.Mesh(cubeGeometry11, cubeMaterial11);
 			cube11.castShadow = true;
@@ -554,7 +556,7 @@
 			// add the cube to the scene
 			scene.add(cube11);
 
-			var cubeGeometry12 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry12 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial12 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube12 = new THREE.Mesh(cubeGeometry12, cubeMaterial12);
 			cube12.castShadow = true;
@@ -567,7 +569,7 @@
 			// add the cube to the scene
 			scene.add(cube12);
 
-			var cubeGeometry13 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry13 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial13 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube13 = new THREE.Mesh(cubeGeometry13, cubeMaterial13);
 			cube13.castShadow = true;
@@ -580,7 +582,7 @@
 			// add the cube to the scene
 			scene.add(cube13);
 
-			var cubeGeometry14 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry14 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial14 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube14 = new THREE.Mesh(cubeGeometry14, cubeMaterial14);
 			cube14.castShadow = true;
@@ -593,7 +595,7 @@
 			// add the cube to the scene
 			scene.add(cube14);
 
-			var cubeGeometry15 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry15 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial15 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube15 = new THREE.Mesh(cubeGeometry15, cubeMaterial15);
 			cube15.castShadow = true;
@@ -606,7 +608,7 @@
 			// add the cube to the scene
 			scene.add(cube15);
 
-			var cubeGeometry16 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry16 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial16 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube16 = new THREE.Mesh(cubeGeometry16, cubeMaterial16);
 			cube16.castShadow = true;
@@ -619,7 +621,7 @@
 			// add the cube to the scene
 			scene.add(cube16);
 
-			var cubeGeometry17 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry17 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial17 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube17 = new THREE.Mesh(cubeGeometry17, cubeMaterial17);
 			cube17.castShadow = true;
@@ -633,7 +635,7 @@
 			scene.add(cube17);
 
 
-			var cubeGeometry18 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry18 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial18 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube18 = new THREE.Mesh(cubeGeometry18, cubeMaterial18);
 			cube18.castShadow = true;
@@ -646,7 +648,7 @@
 			// add the cube to the scene
 			scene.add(cube18);
 
-			var cubeGeometry19 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry19 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial19 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube19 = new THREE.Mesh(cubeGeometry19, cubeMaterial19);
 			cube19.castShadow = true;
@@ -659,7 +661,7 @@
 			// add the cube to the scene
 			scene.add(cube19);
 
-			var cubeGeometry20 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry20 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial20 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube20 = new THREE.Mesh(cubeGeometry20, cubeMaterial20);
 			cube20.castShadow = true;
@@ -672,7 +674,7 @@
 			// add the cube to the scene
 			scene.add(cube20);
 
-			var cubeGeometry21 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry21 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial21 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube21 = new THREE.Mesh(cubeGeometry21, cubeMaterial21);
 			cube21.castShadow = true;
@@ -685,7 +687,7 @@
 			// add the cube to the scene
 			scene.add(cube21);
 
-			var cubeGeometry22 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry22 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial22 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube22 = new THREE.Mesh(cubeGeometry22, cubeMaterial22);
 			cube22.castShadow = true;
@@ -698,7 +700,7 @@
 			// add the cube to the scene
 			scene.add(cube22);
 
-			var cubeGeometry23 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry23 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial23 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube23 = new THREE.Mesh(cubeGeometry23, cubeMaterial23);
 			cube23.castShadow = true;
@@ -711,7 +713,7 @@
 			// add the cube to the scene
 			scene.add(cube23);
 
-			var cubeGeometry24 = new THREE.BoxGeometry(500, 500, 500);
+			var cubeGeometry24 = new THREE.BoxGeometry(300, 300, 300);
 			var cubeMaterial24 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
 			var cube24 = new THREE.Mesh(cubeGeometry24, cubeMaterial24);
 			cube24.castShadow = true;
@@ -724,8 +726,8 @@
 			// add the cube to the scene
 			scene.add(cube24);
 
-			var cubeGeometry25 = new THREE.BoxGeometry(500, 500, 500);
-			var cubeMaterial25 = new THREE.MeshLambertMaterial({ color: 0x33aa77 });
+			var cubeGeometry25 = new THREE.BoxGeometry(300, 300, 300);
+			var cubeMaterial25 = new THREE.MeshLambertMaterial({ color: 0x000000 });
 			var cube25 = new THREE.Mesh(cubeGeometry25, cubeMaterial25);
 			cube25.castShadow = true;
 
@@ -738,14 +740,37 @@
 			scene.add(cube25);
 
 
-			var movingcube_size = new THREE.BoxGeometry(100, 100, 100);
-			var movingcube_color = new THREE.MeshLambertMaterial({ color: 0x422310 });
+			var movingcube_size = new THREE.BoxGeometry(50, 50, 50);
+			var movingcube_color = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
 			MovingCube = new THREE.Mesh(movingcube_size, movingcube_color);
-			MovingCube.position.set(2500, -220, 1500);
+			MovingCube.position.set(-1700, -220, 2000);
 
 			scene.add(MovingCube);
 
 
+			
+
+			for (var i = 0; i < 5; i++) {
+				for (var j = 0; j < 5; j++) {
+
+					var poi_size = new THREE.BoxGeometry(30, 30, 30);
+					var poi_color = new THREE.MeshLambertMaterial({ color: 0xDE3163 });;
+					var tem_pts = new THREE.Mesh(poi_size, poi_color);
+					tem_pts.position.set(2000 - i * 1000 + 200, -20, 2000 - j * 1000);
+
+					pts_arr.push(tem_pts);
+
+				}
+			}
+
+			//console.log(pts_arr);
+			for (var i = 0; i < 5; i++) {
+				for (var j = 0; j < 5; j++) {
+
+					scene.add(pts_arr[i * 5 + j]);
+
+				}
+			}
 
 			// renderer
 
@@ -775,13 +800,19 @@
 			controls.maxPolarAngle = Math.PI * 0.5;
 			controls.minDistance = 1;
 			controls.maxDistance = 10000;
+
+
+			//final destination
+
+			var final_destination = pts_arr[15]; // Here is the final destination. add the final destination. 
+
 		}
 
 		//
 		function update() {
 
 			var delta = clock.getDelta();
-			var movedistance = 200 * delta;
+			var movedistance = 300 * delta;
 			var rotateAngle = Math.PI / 2 * delta;
 
 
@@ -820,6 +851,70 @@
 			camera.position.y = cameraOffset.y;
 			camera.position.z = cameraOffset.z;
 			camera.lookAt(MovingCube.position);
+
+			// determining current location
+
+
+
+			var im_here;
+			var dist_arr = [];
+			for (var i=0;i<5;i++) {
+				for (var j=0;j<5;j++) {
+					//var one_dist = getDistance(pts_arr[i*5+j], MovingCube.position);	
+					var dx = Math.abs(pts_arr[i*5+j].position.x - MovingCube.position.x);
+					var dy = Math.abs(pts_arr[i*5+j].position.y - MovingCube.position.y);
+					var dz = Math.abs(pts_arr[i*5+j].position.z - MovingCube.position.z); 
+					var tem_dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2) + Math.pow(dz,2) );
+					//console.log(1*tem_dist);
+					dist_arr.push(1*tem_dist);
+
+				}
+			}
+
+			var min_val = dist_arr[4];
+			var imhere_i = 0;
+			var imhere_j = 0; // the location index can be found here. 
+			for (var i=0;i<5;i++){
+				for (var j=0;j<5;j++) {
+					 if (min_val > dist_arr[i*5+j]) { // if min_val is bigger than dist_arr, then
+						min_val = dist_arr[i*5+j];
+						imhere_i = i;
+						imhere_j = j;
+					 }
+				}
+			}
+
+
+
+			//console.log(imhere_i);
+			//console.log(imhere_j);
+
+			// Find neighboring places.
+			var neighbor_ones_i = [];
+			var neighbor_ones_j = [];
+			for (var i=0;i<5;i++) {
+				for (var j=0;j<5;j++) {
+					var dx = Math.abs(pts_arr[imhere_i*5+imhere_j].position.x - pts_arr[i*5+j].position.x);
+					var dy = Math.abs(pts_arr[imhere_i*5+imhere_j].position.y - pts_arr[i*5+j].position.y);
+					var dz = Math.abs(pts_arr[imhere_i*5+imhere_j].position.z - pts_arr[i*5+j].position.z); 
+					var tem_dist = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2) + Math.pow(dz,2) );
+					if (tem_dist < 1005 && tem_dist > 0) {
+						neighbor_ones_i.push(i);
+						neighbor_ones_j.push(j);
+					}
+				}
+			}
+			console.log(neighbor_ones_i);
+			console.log(neighbor_ones_j);
+
+			// Find the distance between Neighboring ones and the final destination, and choose the smallest one. 
+
+			for (var i=0;i<neighbor_ones_i.length;i++) {
+				
+
+			}
+
+			// adding an arrow to the nearest next stop. 
 
 		}
 		//
