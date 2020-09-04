@@ -24,9 +24,11 @@
 	</div>
 
 	<script src="./js/Detector.js"></script>
+
 	<script src="./js/THREEx.FullScreen.js"></script>
 	<script src="./js/THREEx.KeyboardState.js"></script>
 	<script src="./js/THREEx.WindowResize.js"></script>
+
 
 
 	<script type="module">
@@ -91,7 +93,29 @@
 		var arrowPosition;
 		var arrowHelper;
 
-
+		var container, stats;
+		var camera, scene, renderer;
+		var mapCamera, mapWidth = 240, mapHeight = 160; // w/h should match div dimensions
+		var clothGeometry;
+		var sphere;
+		var object;
+		var MovingCube;
+		var pts_arr = [];
+		var final_destination;
+		var dirx;
+		var diry;
+		var dirz;
+		var arrowDirection;
+		var arrowPosition;
+		var arrowHelper;
+		var cube_arr;
+		var fin_dest_i;
+		var fin_dest_j;
+		var dist_arr = [];
+		var scene;
+		var min_val;
+		var imhere_i;
+		var imhere_j; 
 
 
 
@@ -240,32 +264,6 @@
 			}
 
 
-			// While many systems use shear and bend springs,
-			// the relaxed constraints model seems to be just fine
-			// using structural springs.
-			// Shear
-			// var diagonalDist = Math.sqrt(restDistance * restDistance * 2);
-
-
-			// for (v=0;v<h;v++) {
-			// 	for (u=0;u<w;u++) {
-
-			// 		constraints.push([
-			// 			particles[index(u, v)],
-			// 			particles[index(u+1, v+1)],
-			// 			diagonalDist
-			// 		]);
-
-			// 		constraints.push([
-			// 			particles[index(u+1, v)],
-			// 			particles[index(u, v+1)],
-			// 			diagonalDist
-			// 		]);
-
-			// 	}
-			// }
-
-
 			this.particles = particles;
 			this.constraints = constraints;
 
@@ -307,24 +305,7 @@
 
 		}
 
-		var container, stats;
-		var camera, scene, renderer;
-		var mapCamera, mapWidth = 240, mapHeight = 160; // w/h should match div dimensions
-		var clothGeometry;
-		var sphere;
-		var object;
-		var MovingCube;
-		var pts_arr = [];
-		var final_destination;
-		var dirx;
-		var diry;
-		var dirz;
-		var arrowDirection;
-		var arrowPosition;
-		var arrowHelper;
-		var cube_arr;
-		var fin_dest_i;
-		var fin_dest_j;
+
 		init();
 		animate(0);
 
@@ -528,7 +509,7 @@
 
 
 			//final destination
-			
+
 			fin_dest_i = 4;
 			fin_dest_j = 3;
 			final_destination = pts_arr[fin_dest_i * 1 + fin_dest_j]; // Here is the final destination. add the final destination. 
@@ -565,126 +546,10 @@
 
 			// determining current location
 
-			var dist_arr = [];
 
+			//show the arrow. 
 
-			// if the user is in one of the circles.
-
-
-			// then show the arrow. 
-
-			for (var i = 0; i < 5; i++) {
-				for (var j = 0; j < 5; j++) {
-					//var one_dist = getDistance(pts_arr[i*5+j], MovingCube.position);	
-					var dx = Math.abs(pts_arr[i * 5 + j].position.x - MovingCube.position.x);
-					var dy = Math.abs(pts_arr[i * 5 + j].position.y - MovingCube.position.y);
-					var dz = Math.abs(pts_arr[i * 5 + j].position.z - MovingCube.position.z);
-					var tem_dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
-					//console.log(1*tem_dist);
-					dist_arr.push(1 * tem_dist);
-
-				}
-			}
-
-			var min_val = dist_arr[4];
-			var imhere_i = 0;
-			var imhere_j = 0; // the location index can be found here. 
-			for (var i = 0; i < 5; i++) {
-				for (var j = 0; j < 5; j++) {
-					if (min_val > dist_arr[i * 5 + j]) { // if min_val is bigger than dist_arr, then
-						min_val = dist_arr[i * 5 + j];
-						imhere_i = i;
-						imhere_j = j;
-					}
-				}
-			}
-
-			
-			// distance from cube to final destination
-
-			var dx = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.x - final_destination.position.x);
-			var dy = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.y - final_destination.position.y);
-			var dz = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.z - final_destination.position.z);
-			var dist_to_dest = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
-			console.log(dist_to_dest);
-
-			if (min_val < 171) {
-				
-				if (dist_to_dest >100) {
-
-				// Find neighboring places.
-				var neighbor_ones_i = [];
-				var neighbor_ones_j = [];
-				for (var i = 0; i < 5; i++) {
-					for (var j = 0; j < 5; j++) {
-						var dx = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.x - pts_arr[i * 5 + j].position.x);
-						var dy = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.y - pts_arr[i * 5 + j].position.y);
-						var dz = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.z - pts_arr[i * 5 + j].position.z);
-						var tem_dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
-						if (tem_dist < 1005 && tem_dist > 0) {
-							neighbor_ones_i.push(i);
-							neighbor_ones_j.push(j);
-						}
-					}
-				}
-				//console.log(neighbor_ones_i);
-				//console.log(neighbor_ones_j);
-
-				// Find the distance between Neighboring ones and the final destination, and choose the smallest one. 
-
-
-				var dist_neigh_to_dest_i = [];
-				for (var i = 0; i < neighbor_ones_i.length; i++) {
-					var dx = Math.abs(final_destination.position.x - pts_arr[neighbor_ones_i[i] * 5 + neighbor_ones_j[i]].position.x);
-					var dy = Math.abs(final_destination.position.y - pts_arr[neighbor_ones_i[i] * 5 + neighbor_ones_j[i]].position.y);
-					var dz = Math.abs(final_destination.position.z - pts_arr[neighbor_ones_i[i] * 5 + neighbor_ones_j[i]].position.z);
-					var tem_dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
-					dist_neigh_to_dest_i.push(tem_dist);
-				}
-
-				// sort and choose the 
-				var chosen_neigh_i = neighbor_ones_i[0];
-				var chosen_neigh_j = neighbor_ones_j[0];
-				for (var i = 1; i < neighbor_ones_i.length; i++) {
-					if (dist_neigh_to_dest_i[i] < dist_neigh_to_dest_i[0]) {
-						chosen_neigh_i = neighbor_ones_i[i];
-						chosen_neigh_j = neighbor_ones_j[i];
-					}
-				}
-
-				//console.log(chosen_neigh_i);
-				//console.log(chosen_neigh_j);
-
-				// adding an arrow to the nearest next stop. 
-
-				dirx = pts_arr[chosen_neigh_i * 5 + chosen_neigh_j].position.x - MovingCube.position.x;
-				diry = pts_arr[chosen_neigh_i * 5 + chosen_neigh_j].position.y - MovingCube.position.y;
-				dirz = pts_arr[chosen_neigh_i * 5 + chosen_neigh_j].position.z - MovingCube.position.z;
-
-				//console.log(dirx);
-				//console.log(diry);
-				//console.log(dirz);
-				var tot_dist_left = Math.sqrt(Math.pow(Math.abs(dirx), 2) + Math.pow(Math.abs(diry), 2) + Math.pow(Math.abs(dirz), 2));
-
-
-				arrowDirection = new THREE.Vector3(dirx, diry, dirz).normalize();
-				arrowPosition = MovingCube.position;
-				arrowHelper = new THREE.ArrowHelper(arrowDirection, arrowPosition, 70, 0x000000);
-				scene.add(arrowHelper);
-			}
-			else {
-				MovingCube.material.color.setHex(0x44AAFF);
-			}
-
-
-
-			}
-
-
-			//console.log(imhere_i);
-			//console.log(imhere_j);
-
-
+			show_arrow();
 
 		}
 		//
@@ -718,9 +583,123 @@
 
 		}
 
+		function show_arrow() {
+
+
+			//console.log(MovingCube.position.x);
+			//console.log(MovingCube.position.y);
+			//console.log(MovingCube.position.z);
+			dist_arr = [];
+			for (var i = 0; i < 5; i++) {
+				for (var j = 0; j < 5; j++) {
+					//var one_dist = getDistance(pts_arr[i*5+j], MovingCube.position);	
+					var dx = Math.abs(pts_arr[i * 5 + j].position.x - MovingCube.position.x);
+					var dy = Math.abs(pts_arr[i * 5 + j].position.y - MovingCube.position.y);
+					var dz = Math.abs(pts_arr[i * 5 + j].position.z - MovingCube.position.z);
+					var tem_dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+					//console.log(1*tem_dist);
+					dist_arr.push(1 * tem_dist);
+
+				}
+			}
+
+			console.log(dist_arr);
+			min_val = dist_arr[4];
+			imhere_i = 0;
+			imhere_j = 0; // the location index can be found here. 
+			for (var i = 0; i < 5; i++) {
+				for (var j = 0; j < 5; j++) {
+					if (min_val > dist_arr[i * 5 + j]) { // if min_val is bigger than dist_arr, then
+						min_val = dist_arr[i * 5 + j];
+						imhere_i = i;
+						imhere_j = j;
+					}
+				}
+			}
+
+			//console.log(imhere_i);
+			//console.log(imhere_j);
+			// distance from cube to final destination
+
+			var dx = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.x - final_destination.position.x);
+			var dy = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.y - final_destination.position.y);
+			var dz = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.z - final_destination.position.z);
+			var dist_to_dest = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+			//console.log(dist_to_dest);
+
+			if (min_val < 171) {
+
+				if (dist_to_dest > 100) {
+
+					// Find neighboring places.
+					var neighbor_ones_i = [];
+					var neighbor_ones_j = [];
+					for (var i = 0; i < 5; i++) {
+						for (var j = 0; j < 5; j++) {
+							var dx = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.x - pts_arr[i * 5 + j].position.x);
+							var dy = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.y - pts_arr[i * 5 + j].position.y);
+							var dz = Math.abs(pts_arr[imhere_i * 5 + imhere_j].position.z - pts_arr[i * 5 + j].position.z);
+							var tem_dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+							if (tem_dist < 1005 && tem_dist > 0) {
+								neighbor_ones_i.push(i);
+								neighbor_ones_j.push(j);
+							}
+						}
+					}
+					//console.log(neighbor_ones_i);
+					//console.log(neighbor_ones_j);
+
+					// Find the distance between Neighboring ones and the final destination, and choose the smallest one. 
+
+
+					var dist_neigh_to_dest_i = [];
+					for (var i = 0; i < neighbor_ones_i.length; i++) {
+						var dx = Math.abs(final_destination.position.x - pts_arr[neighbor_ones_i[i] * 5 + neighbor_ones_j[i]].position.x);
+						var dy = Math.abs(final_destination.position.y - pts_arr[neighbor_ones_i[i] * 5 + neighbor_ones_j[i]].position.y);
+						var dz = Math.abs(final_destination.position.z - pts_arr[neighbor_ones_i[i] * 5 + neighbor_ones_j[i]].position.z);
+						var tem_dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2));
+						dist_neigh_to_dest_i.push(tem_dist);
+					}
+
+					// sort and choose the 
+					var chosen_neigh_i = neighbor_ones_i[0];
+					var chosen_neigh_j = neighbor_ones_j[0];
+					for (var i = 1; i < neighbor_ones_i.length; i++) {
+						if (dist_neigh_to_dest_i[i] < dist_neigh_to_dest_i[0]) {
+							chosen_neigh_i = neighbor_ones_i[i];
+							chosen_neigh_j = neighbor_ones_j[i];
+						}
+					}
+
+					//console.log(chosen_neigh_i);
+					//console.log(chosen_neigh_j);
+
+					// adding an arrow to the nearest next stop. 
+
+					dirx = pts_arr[chosen_neigh_i * 5 + chosen_neigh_j].position.x - MovingCube.position.x;
+					diry = pts_arr[chosen_neigh_i * 5 + chosen_neigh_j].position.y - MovingCube.position.y;
+					dirz = pts_arr[chosen_neigh_i * 5 + chosen_neigh_j].position.z - MovingCube.position.z;
+
+					//console.log(dirx);
+					//console.log(diry);
+					//console.log(dirz);
+					var tot_dist_left = Math.sqrt(Math.pow(Math.abs(dirx), 2) + Math.pow(Math.abs(diry), 2) + Math.pow(Math.abs(dirz), 2));
+
+
+					arrowDirection = new THREE.Vector3(dirx, diry, dirz).normalize();
+					arrowPosition = pts_arr[imhere_i * 5 + imhere_j].position;
+					arrowHelper = new THREE.ArrowHelper(arrowDirection, arrowPosition, 70, 0x000000);
+					scene.add(arrowHelper);
+				}
+				else {
+					MovingCube.material.color.setHex(0x44AAFF);
+				}
+			}
+		}
 
 	</script>
-
+	//
+	<script src="./js/show_arrow.js"></script>
 </body>
 
 </html>
